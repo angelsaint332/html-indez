@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Deal Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>New Deal: Relief, Reform, Recovery</h1>
+    <div id="game">
+        <div id="sectors">
+            <h2>Sectors</h2>
+            <p>Employment: <span id="employment">50</span></p>
+            <p>Banking: <span id="banking">50</span></p>
+            <p>Agriculture: <span id="agriculture">50</span></p>
+            <p>Industry: <span id="industry">50</span></p>
+        </div>
+
+        <div id="actions">
+            <h2>Actions</h2>
+            <button onclick="implementReliefProgram()">Implement Relief Program</button>
+            <button onclick="fundPublicWorks()">Fund Public Works</button>
+        </div>
+
+        <div id="chance-event">
+            <h2>Chance Events</h2>
+            <button onclick="triggerChanceEvent()">Draw a Chance Card</button>
+            <p id="event-text"></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f9;
+}
+
+#game {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+#sectors, #actions, #chance-event {
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    width: 200px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+// Initial sector points
+let sectors = {
+    employment: 50,
+    banking: 50,
+    agriculture: 50,
+    industry: 50
+};
+
+// Update the UI with current sector points
+function updateBoard() {
+    document.getElementById("employment").innerText = sectors.employment;
+    document.getElementById("banking").innerText = sectors.banking;
+    document.getElementById("agriculture").innerText = sectors.agriculture;
+    document.getElementById("industry").innerText = sectors.industry;
+}
+
+// Player Actions
+function implementReliefProgram() {
+    sectors.employment += 10;
+    sectors.banking -= 5;
+    updateBoard();
+}
+
+function fundPublicWorks() {
+    sectors.agriculture += 5;
+    sectors.industry += 10;
+    sectors.employment += 5;
+    updateBoard();
+}
+
+// Chance Events
+const chanceEvents = [
+    { text: "Dust Bowl hits agriculture, -10 Agriculture", effect: () => sectors.agriculture -= 10 },
+    { text: "Stock Market Stabilizes, +5 Banking", effect: () => sectors.banking += 5 },
+    { text: "Unemployment rises, -10 Employment", effect: () => sectors.employment -= 10 },
+    { text: "Government Infrastructure Bill, +10 Industry", effect: () => sectors.industry += 10 },
+];
+
+function triggerChanceEvent() {
+    let event = chanceEvents[Math.floor(Math.random() * chanceEvents.length)];
+    document.getElementById("event-text").innerText = event.text;
+    event.effect();
+    updateBoard();
+}
+
+// Initialize the game board when the page loads
+updateBoard();
